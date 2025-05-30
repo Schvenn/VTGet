@@ -37,5 +37,3 @@ Append-Output "`n$permalink" Cyan; Append-Output "Detected by $malicious engine(
 $results = foreach ($engine in $report.data.attributes.last_analysis_results.PSObject.Properties) {if ($engine.Value.result -and $engine.Value.result -notin @('clean', 'unrated')) {[PSCustomObject]@{Engine = $engine.Value.engine_name; Result = $engine.Value.result}}}
 $results = $results | Sort-Object Engine -Unique; $tablestring = $results | Format-Table -Autosize | Out-String; Append-Output $tableString White
 if ($save) {$global:stringBuilder.ToString() | Out-File -FilePath $outfile -Encoding UTF8; Append-Output "Report saved to $outfile" Cyan}} catch {Write-Host "`nError querying VirusTotal:`n$_" Yellow}}; ""; return}
-
-if (Get-Command vtget -ErrorAction SilentlyContinue) {Write-Host -f green "VTGet loaded successfully."} else {Write-Host -f red "VTGet function not loaded."}
